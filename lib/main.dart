@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:marlo_technologies/view/home.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:marlo_technologies/view/sub/bottom_nav_controller.dart';
+import 'package:marlo_technologies/view/sub/bottom_nav_screen/home/home.dart';
+import 'package:marlo_technologies/view/sub/bottom_nav_screen/screen_two.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,17 +13,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Marlo Technologies',
-      theme: ThemeData(
-    
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return ScreenUtilInit(
+      builder: (context, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/bottomNav',
+        routes: {
+          '/homeScreen': (context) => HomeScreen(),
+          "/allTransactinos": (context) => const ViewAllTransactions(),
+          '/bottomNav': (context) => BottomNav(),
+        },
+        title: 'Marlo Technologies',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: BottomNav(),
       ),
-      home: const HomeScreen(
-        
-      ),
+      
     );
+    
   }
-}
+  
 
+}
