@@ -29,6 +29,17 @@ class FilterProvider with ChangeNotifier {
     }
   }
 
+  dynamic choosedDate = 'Custom';
+
+  void setDateFilter([List<String>? data]) {
+    if (data != null) {
+      choosedDate = "${data[0]} - ${data[1]}";
+    } else {
+      choosedDate = 'Custom';
+    }
+    notifyListeners();
+  }
+
   void setStatus(filter) {
     if (selectedFilters.contains(filter)) {
       selectedFilters.remove(filter);

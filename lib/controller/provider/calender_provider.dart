@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 class CalenderProvider with ChangeNotifier {
   DateTime selectedDate = DateTime.now();
+
   DateTime selectedDate2 =
       DateTime(DateTime.now().year, DateTime.now().month + 1, 1);
-
   void changeSelectedDate(DateTime date) {
     selectedDate = date;
     notifyListeners();
@@ -14,4 +14,5 @@ class CalenderProvider with ChangeNotifier {
     selectedDate2 = date;
     notifyListeners();
   }
+
 }

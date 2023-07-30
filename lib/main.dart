@@ -30,14 +30,14 @@ class MyApp extends StatelessWidget {
           routes: {
             '/homeScreen': (context) => HomeScreen(),
             "/allTransactinos": (context) => const ViewAllTransactions(),
-            '/bottomNav': (context) => BottomNav(),
+            '/bottomNav': (context) => const BottomNav(),
           },
           title: 'Marlo Technologies',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
           ),
-          home: BottomNav(),
+          home: const BottomNav(),
         ),
       ),
     );

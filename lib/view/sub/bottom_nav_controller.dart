@@ -3,10 +3,9 @@ import 'package:marlo_technologies/view/sub/bottom_nav_screen/home/home.dart';
 import 'package:marlo_technologies/view/sub/bottom_nav_screen/screen_five.dart';
 import 'package:marlo_technologies/view/sub/bottom_nav_screen/screen_four.dart';
 import 'package:marlo_technologies/view/sub/bottom_nav_screen/screen_three.dart';
-import 'package:marlo_technologies/view/sub/bottom_nav_screen/screen_two.dart';
 
 class BottomNav extends StatefulWidget {
-  BottomNav({super.key});
+  const BottomNav({super.key});
 
   @override
   State<BottomNav> createState() => _BottomNavState();
