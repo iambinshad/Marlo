@@ -15,10 +15,10 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   List<Widget> screen = [
      HomeScreen(),
-    const ViewAllTransactions(),
-    const Screenthree(),
     const ScreenFour(),
-    const ScreenFive(),
+    const Screenthree(),
+    ScreenFive(),
+     ScreenFive(),
   ];
 
 

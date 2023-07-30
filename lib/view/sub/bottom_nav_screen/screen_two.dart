@@ -1,15 +1,32 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:marlo_technologies/common/widgets.dart';
+import 'package:marlo_technologies/controller/provider/filter_provider.dart';
+import 'package:marlo_technologies/view/sub/bottom_nav_screen/screen_five.dart';
+import 'package:provider/provider.dart';
 
-class ViewAllTransactions extends StatelessWidget {
+class ViewAllTransactions extends StatefulWidget {
   const ViewAllTransactions({super.key});
 
+  @override
+  State<ViewAllTransactions> createState() => _ViewAllTransactionsState();
+}
+
+class _ViewAllTransactionsState extends State<ViewAllTransactions> {
+  List<String> currency = [
+    "assets/usa.png",
+    "assets/united-kingdom.png",
+    "assets/canada.png"
+  ];
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
+        backgroundColor: const Color.fromARGB(255, 243, 243, 243),
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: const Color.fromARGB(255, 243, 243, 243),
           elevation: 0.0,
           scrolledUnderElevation: 0.0,
           bottom: PreferredSize(
@@ -93,7 +110,7 @@ class ViewAllTransactions extends StatelessWidget {
         body: ListView.builder(
           itemBuilder: (context, index) => Padding(
             padding:
-                const EdgeInsets.only(left: 6, right: 6, bottom: 2, top: 2),
+                const EdgeInsets.only(left: 13, right: 13, bottom: 4, top: 2),
             child: Container(
               padding: const EdgeInsets.all(11),
               decoration: BoxDecoration(
@@ -158,13 +175,356 @@ class ViewAllTransactions extends StatelessWidget {
 
   void openBottomSheet(context, height) {
     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     double desiredHeight = (screenHeight / 3) * 4 + 750;
     showModalBottomSheet(
+      enableDrag: true,
+      showDragHandle: true,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       context: context,
-      builder: (context) => FractionallySizedBox(
-        heightFactor: desiredHeight / screenHeight,
+      builder: (context) => SizedBox(
+        height: screenHeight / 1.1,
+        width: screenWidth,
         child: Container(
-          color: Colors.red,
+          height: desiredHeight,
+          width: screenWidth,
+          padding: const EdgeInsets.all(13),
+          color: const Color.fromARGB(255, 243, 243, 243),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const Row(
+                  children: [
+                    Text(
+                      "Filter",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    ),
+                  ],
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "Clear",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue),
+                    ),
+                  ],
+                ),
+                const KHeight(
+                  height: 10,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  height: 90,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14)),
+                  child: Consumer<FilterProvider>(
+                    builder: (context, value, child) => Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Row(
+                          children: [
+                            Text(
+                              "Money in and out - 2",
+                              style: TextStyle(
+                                  fontSize: 19, fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                        const KHeight(
+                          height: 7,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            _buildFilterButton(
+                                'Money in', value.isMoneyInSelected, () {
+                              value.clickMoneyIn();
+                            }),
+                            _buildFilterButton(
+                                'Money out', value.isMoneyOutSelected, () {
+                              value.clickMoneyOut();
+                            })
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  height: 90,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14)),
+                  child: Consumer<FilterProvider>(
+                    builder: (context, value, child) => Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Row(
+                          children: [
+                            Text(
+                              "Statuses - 3",
+                              style: TextStyle(
+                                  fontSize: 19, fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                        const KHeight(
+                          height: 7,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            _buildFilterButton('Completed',
+                                value.selectedFilters.contains('Completed'),
+                                () {
+                              _toggleFilter('Completed');
+                            }),
+                            const SizedBox(width: 10),
+                            _buildFilterButton('Pending',
+                                value.selectedFilters.contains('Pending'), () {
+                              _toggleFilter('Pending');
+                            }),
+                            const SizedBox(width: 10),
+                            _buildFilterButton('Cancelled',
+                                value.selectedFilters.contains('Cancelled'),
+                                () {
+                              _toggleFilter('Cancelled');
+                            }),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14)),
+                  child: Consumer<FilterProvider>(
+                    builder: (context, value, child) => Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(value: value.allCheckBox, onChanged: (checkValue) {
+                              value.setCheckBox("allCurrencies");
+                            }),
+                            const Text(
+                              "Currencies -167",
+                              style: TextStyle(
+                                  fontSize: 19, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(value: value.uSDCheckBox, onChanged: (checkValue) {
+                               value.setCheckBox("USD",);
+                            }),
+                            CircleAvatar(
+                              backgroundImage: AssetImage(
+                                currency[0],
+                              ),
+                              radius: 19,
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "USD",
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "United States Dollar",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey),
+                                    )
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        const KHeight(
+                          height: 15,
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(value: value.cADCheckBox, onChanged: (checkValue) {
+                               value.setCheckBox("CAD", );
+                            }),
+                            CircleAvatar(
+                              backgroundImage: AssetImage(
+                                currency[1],
+                              ),
+                              radius: 19,
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "CAD",
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Cannedian Dollar",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey),
+                                    )
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        const KHeight(
+                          height: 15,
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(value: value.gBPCheckBox, onChanged: (checkValue) {
+                               value.setCheckBox("GBP",);
+                            }),
+                            CircleAvatar(
+                              backgroundImage: AssetImage(
+                                currency[2],
+                              ),
+                              radius: 19,
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "GBP",
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "British Pound",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey),
+                                    )
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        const KHeight(
+                          height: 20,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "See all accounts",
+                                style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.blue),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const KHeight(
+                          height: 15,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                KHeight(height: 30,),
+                ScreenFive(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _toggleFilter(String filter) {
+    Provider.of<FilterProvider>(context, listen: false).setStatus(filter);
+  }
+
+  Widget _buildFilterButton(String text, bool isSelected, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? const Color.fromARGB(255, 189, 230, 250)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: isSelected ? Colors.blue : Colors.grey,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
         ),
       ),
     );
