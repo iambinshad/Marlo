@@ -66,4 +66,10 @@ class FilterProvider with ChangeNotifier {
     isMoneyInSelected = !isMoneyOutSelected;
     notifyListeners();
   }
+
+  void clickFilterApply(){
+    print(selectedFilters.toList());
+  }
+
+
 }

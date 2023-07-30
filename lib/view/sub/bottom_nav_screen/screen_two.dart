@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:marlo_technologies/common/widgets.dart';
 import 'package:marlo_technologies/controller/provider/calender_provider.dart';
 import 'package:marlo_technologies/controller/provider/filter_provider.dart';
+import 'package:marlo_technologies/view/sub/bottom_nav_screen/home/widgets.dart';
 import 'package:marlo_technologies/view/sub/bottom_nav_screen/screen_five.dart';
 import 'package:provider/provider.dart';
 
@@ -107,81 +108,21 @@ class _ViewAllTransactionsState extends State<ViewAllTransactions> {
             )
           ],
         ),
-        body: ListView.builder(
-          itemBuilder: (context, index) => Padding(
-            padding:
-                const EdgeInsets.only(left: 13, right: 13, bottom: 4, top: 2),
-            child: Container(
-              padding: const EdgeInsets.all(11),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 43,
-                        width: 43,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: const Color.fromARGB(255, 6, 72, 126),
-                        ),
-                        child: const Icon(
-                          Icons.arrow_outward_outlined,
-                          size: 34,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Rent",
-                        style: TextStyle(
-                            fontSize: 19, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "Sat-16 jul - 9.00 pm",
-                        style: TextStyle(fontSize: 15, color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "-\$850.00",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w700),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
+        body: Column(
+          children: [
+            const AllTransactionSections(),
+          ],
         ));
   }
 
   void openCalenderBottomSheet() {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    double desiredHeight = (screenHeight / 3) * 4 + 750;
     showModalBottomSheet(
       enableDrag: true,
       showDragHandle: true,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30), topRight: Radius.circular(30))),
       context: context,
@@ -468,6 +409,7 @@ class _ViewAllTransactionsState extends State<ViewAllTransactions> {
                             Row(
                               children: [
                                 Checkbox(
+                                  
                                     value: value.gBPCheckBox,
                                     onChanged: (checkValue) {
                                       value.setCheckBox(
@@ -737,10 +679,11 @@ class _ViewAllTransactionsState extends State<ViewAllTransactions> {
                         child: SizedBox(
                           height: 50,
                           width: double.infinity / 1.5,
-                          child: Consumer<CalenderProvider>(
-                            builder: (context, value, child) => ElevatedButton(
+                          child: Consumer2<CalenderProvider,FilterProvider>(
+                            builder: (context, value,value2, child) => ElevatedButton(
                               onPressed: () {
                                 Navigator.pop(context);
+                               value2.clickFilterApply();
                               },
                               style: ElevatedButton.styleFrom(
                                   elevation: 10,
@@ -758,7 +701,7 @@ class _ViewAllTransactionsState extends State<ViewAllTransactions> {
                       ),
                     ],
                   ))
-            ],
+            ]
           ),
         ),
       ),

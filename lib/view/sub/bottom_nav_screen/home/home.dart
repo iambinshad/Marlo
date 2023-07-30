@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:marlo_technologies/common/widgets.dart';
+import 'package:marlo_technologies/controller/all_services.dart';
+import 'package:marlo_technologies/controller/provider/all_transaction_provider.dart';
 import 'package:marlo_technologies/view/sub/bottom_nav_screen/home/widgets.dart';
+import 'package:marlo_technologies/view/sub/bottom_nav_screen/screen_two.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  
   List<String> currency = [
     "assets/usa.png",
     "assets/united-kingdom.png",
     "assets/canada.png"
   ];
+
   List<List<Color>> gredientColor = [
     [Colors.white, const Color.fromARGB(255, 136, 92, 144)],
     [Colors.white, Colors.orange.withOpacity(0.4)],
@@ -24,8 +35,11 @@ class HomeScreen extends StatelessWidget {
     Colors.green.withOpacity(0.5)
   ];
 
+
+
   @override
   Widget build(BuildContext context) {
+
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -85,7 +99,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, '/allTransactinos');
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAllTransactions(),));
                   },
                   child: const Text(
                     "See all",
@@ -101,7 +115,7 @@ class HomeScreen extends StatelessWidget {
           const KHeight(
             height: 10,
           ),
-          const AllTransactionSectino()
+          const AllTransactionSections()
         ],
       ),
     );

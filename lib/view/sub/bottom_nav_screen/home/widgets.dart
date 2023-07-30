@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:marlo_technologies/common/widgets.dart';
+import 'package:marlo_technologies/controller/provider/all_transaction_provider.dart';
+import 'package:provider/provider.dart';
 
 class CurrencyListSection extends StatelessWidget {
   const CurrencyListSection({
@@ -72,71 +75,82 @@ class CurrencyListSection extends StatelessWidget {
   }
 }
 
-class AllTransactionSectino extends StatelessWidget {
-  const AllTransactionSectino({
+class AllTransactionSections extends StatelessWidget {
+  const AllTransactionSections({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: ListView.builder(
-      itemBuilder: (context, index) => Padding(
-        padding: const EdgeInsets.only(left: 15, right: 15, bottom: 2, top: 2),
-        child: Container(
-          padding: const EdgeInsets.all(11),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(10)),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 43,
-                    width: 43,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: const Color.fromARGB(255, 6, 72, 126),
+        child: Consumer<TransactionProvider>(
+      builder: (context, value, child) => ListView.builder(
+        itemCount: value.allTransactions.length,
+        itemBuilder: (context, index) => Padding(
+          padding:
+              const EdgeInsets.only(left: 15, right: 15, bottom: 2, top: 2),
+          child: Container(
+            padding: const EdgeInsets.all(11),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 43,
+                      width: 43,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: const Color.fromARGB(255, 6, 72, 126),
+                      ),
+                      child:  Icon(
+                        !value.allTransactions[index].amount.contains("-")?Icons.arrow_outward_outlined:Icons.arrow_downward_outlined,
+                        size: 34,
+                        color: Colors.white,
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.arrow_outward_outlined,
-                      size: 34,
-                      color: Colors.white,
+                  ],
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      value.allTransactions[index].transactionType,
+                      style:
+                          TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Rent",
-                    style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "Sat-16 jul - 9.00 pm",
-                    style: TextStyle(fontSize: 15, color: Colors.grey),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "-\$850.00",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                  ),
-                ],
-              )
-            ],
+                    Text(
+                     value.allTransactions[index].settledAt!=null? DateFormat('MMMM d, yyyy').format(value.allTransactions[index].settledAt!):"none",
+                      style: TextStyle(fontSize: 15, color: Colors.grey),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "\$${value.allTransactions[index].amount.replaceAll("-", "")}",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color:
+                              !value.allTransactions[index].amount.contains("-")
+                                  ? Colors.green
+                                  : Colors.black),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
