@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:marlo_technologies/common/widgets.dart';
 import 'package:marlo_technologies/controller/all_services.dart';
 import 'package:marlo_technologies/controller/provider/all_transaction_provider.dart';
+import 'package:marlo_technologies/controller/provider/filter_provider.dart';
 import 'package:marlo_technologies/view/sub/bottom_nav_screen/home/widgets.dart';
 import 'package:marlo_technologies/view/sub/bottom_nav_screen/screen_two.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  
   List<String> currency = [
     "assets/usa.png",
     "assets/united-kingdom.png",
@@ -35,11 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
     Colors.green.withOpacity(0.5)
   ];
 
-
-
   @override
   Widget build(BuildContext context) {
-
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -99,7 +96,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAllTransactions(),));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewAllTransactions(),
+                        ));
                   },
                   child: const Text(
                     "See all",
